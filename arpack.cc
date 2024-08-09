@@ -43,12 +43,24 @@ extern "C" {
 
 inline void AlgVectorInit(double *v, int size) {for(int i=0; i<size; i++) v[i]=0;}
 inline void printVector(double *v, int size) {for(int i=0; i<size; i++) cout << v[i] << endl;}       
+void convertMatrix(int thsize, vector<HEle> * phami, double * evec1){
+
+   for(vector<HEle>::iterator Hrow_itr=phami->begin();
+       Hrow_itr!=phami->end(); Hrow_itr++) {
+       int mycol=Hrow_itr->getx();
+       int myrow=Hrow_itr->gety();
+       double myVal=Hrow_itr->getVal();
+       //if(count==1) cout << "\t  " << mycol << " " << myrow << " " << myVal << endl;
+       evec1[mycol*thsize + myrow]+=myVal;
+   }//for temp_pt (j)
+
+}
 
 
-void EDlapack(const int N, double *a, double *w){
+void EDlapack(int hhsize, double *a, double *w){
 
-   int lda2 = N;
-   int lda = N, info, lwork;
+   int lda2 = hhsize;
+   int lda = hhsize, info, lwork;
    double wkopt;
    /* Executable statements */
    cout << endl << " DSYEV Example Program Results" << endl;
@@ -69,11 +81,12 @@ void EDlapack(const int N, double *a, double *w){
    return;
 }
 
+
+/*
 void EDarpack( int Hsize, vector<HEle> *phami, 
                double *eval, double *evec, int nev){
 
 //                 PARPACK Initialization                 
-/*
 !     %---------------------------------------------------%^M
 !     | This program uses exact shifts with respect to    |^M
 !     | the current Hessenberg matrix (IPARAM(1) = 1).    |^M
@@ -83,7 +96,6 @@ void EDarpack( int Hsize, vector<HEle> *phami,
 !     | changed by the user. For details, see the         |^M
 !     | documentation in PSSAUPD.                         |^M
 !     %---------------------------------------------------%^M
-*/
     if(phami->empty()){
        cout << "The Hamiltonian matrix is empty!" << endl;
        return;
@@ -121,20 +133,17 @@ void EDarpack( int Hsize, vector<HEle> *phami,
     //The x vector in y=OP*x multiplication. It is used to receive data from processors
     double *vector_in=(double *)malloc(Hsize*sizeof(double));           
     int count=0;
-/*
 !        %---------------------------------------------%^M
 !        | Repeatedly call the routine PSSAUPD and take| ^M
 !        | actions indicated by parameter IDO until    |^M
 !        | either convergence is indicated or maxitr   |^M
 !        | has been exceeded.                          |^M
 !        %---------------------------------------------%^M
-*/
  
     dsaupd_( &ido, bmat, &Hsize, which, &nev, &tol,
              resid_pt, &ncv, V_pt, &ldv, iparam, ipntr, workd_pt, 
              workl_pt, &lworkl, &info); //run the first iteration
     count++;
-/*
 !         %-------------------------------------------%^M
 !         | M A I N   L O O P (Reverse communication) |^M
 !         %-------------------------------------------%^M
@@ -148,7 +157,6 @@ void EDarpack( int Hsize, vector<HEle> *phami,
 !           | the input, and return the result to  |^M
 !           | workd(ipntr(2)).                     |^M
 !           %--------------------------------------%                    ^M
-*/
 
     for(;ido==1||ido==-1;count++) {
 
@@ -172,26 +180,21 @@ void EDarpack( int Hsize, vector<HEle> *phami,
        cout << "\t\tThe " << count << "-th iteration of dsaupd_" << endl;
         
     }//for ido iteration
-/*
 !     %----------------------------------------%^M
 !     | Either we have convergence or there is |^M
 !     | an error.                              |^M
 !     %----------------------------------------%^M
-*/   
     if(info<0){      //Error message. Check the documentation in PSSAUPD
-/*
 !        %--------------------------%^M
 !        | Error message. Check the |^M
 !        | documentation in PSSAUPD.|^M
 !        %--------------------------%^M
-*/
         cout << " Print Log: Error appears in _saupd, info = " << info << endl 
              << " Check the documentation of _saupd. " << endl
              << " Print Log: nev=" << nev << "    ncv=" << ncv;
         //     << " nloc=" << nloc << endl << endl;
         return;
     } else {
-/*
 !        %-------------------------------------------%^M
 !        | No fatal errors occurred.                 |^M
 !        | Post-Process using PSSEUPD.               |^M
@@ -201,7 +204,6 @@ void EDarpack( int Hsize, vector<HEle> *phami,
 !        | Eigenvectors may also be computed now if  |^M
 !        | desired.  (indicated by rvec = .true.)    | ^M
 !        %-------------------------------------------%^M
-*/
         rvec=1;
         int ldz=Hsize;
         double sigma;
@@ -217,7 +219,6 @@ void EDarpack( int Hsize, vector<HEle> *phami,
         dseupd_( &rvec, HowMny, select_pt, d_pt, evec, 
                  &ldz, &sigma, bmat, &Hsize, which, &nev, &tol, resid_pt, &ncv, 
                  V_pt, &ldv, iparam, ipntr, workd_pt, workl_pt, &lworkl, &info);
-/*
 !        %----------------------------------------------%^M
 !        | Eigenvalues are returned in the first column |^M
 !        | of the two dimensional array D and the       |^M
@@ -228,7 +229,6 @@ void EDarpack( int Hsize, vector<HEle> *phami,
 !        | Corresponding to the eigenvalues in D is     |^M
 !        | returned in V.                               |^M
 !        %----------------------------------------------%^M
-*/
         if(info){     //Error condition
             cout << "Print Log: Error appears in _seupd, infor = " << info << endl 
                  << "Check the documentation of _seupd. " << endl 
@@ -247,11 +247,9 @@ void EDarpack( int Hsize, vector<HEle> *phami,
             }
             free(select_pt);            
         }
-/*
 !        %------------------------------------------%^M
 !        | Print additional convergence information |^M
 !        %------------------------------------------%^M
-*/
         if(info==1){
            cout << endl << "Maximum number of iterations reached."<< endl;
         } else if(info==3){
@@ -279,6 +277,7 @@ void EDarpack( int Hsize, vector<HEle> *phami,
 
     return;
 }//EDarpack
+*/
 
 
 

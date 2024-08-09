@@ -12,10 +12,11 @@
 
 using namespace std;
 
-void EDlapack(const int, double *, double *);
+void EDlapack(int, double *, double *);
 
-void EDarpack(int, vector<HEle> *, 
-               double *, double *, int);
+//void EDarpack(int, vector<HEle> *, 
+//               double *, double *, int);
 
+void convertMatrix(int, vector<HEle> *, double *);
 
 #endif

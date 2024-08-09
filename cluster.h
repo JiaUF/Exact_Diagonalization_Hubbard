@@ -15,8 +15,9 @@ class Cluster{
    
   public:
    //constructor
-   Cluster(int n){
-      int N=n;
+   Cluster(int n, int dim){
+     int N=n;
+     if(dim==2){
       switch(N){
          case 4:
             /*       
@@ -279,6 +280,112 @@ class Cluster{
          default:
             break;
       }
+     } else if(dim==1){
+      switch(N){
+         case 4:
+            /*
+                   0 --- 1 --- 2 --- 3
+            */
+            // [][0] up, [][1] dn, [][2] right, [][3] left
+            nghb[0][0]=-1; nghb[0][1]=-1; nghb[0][2]=1; nghb[0][3]=3;
+            nghb[1][0]=-1; nghb[1][1]=-1; nghb[1][2]=2; nghb[1][3]=0;
+            nghb[2][0]=-1; nghb[2][1]=-1; nghb[2][2]=3; nghb[2][3]=1;
+            nghb[3][0]=-1; nghb[3][1]=-1; nghb[3][2]=0; nghb[3][3]=2;
+
+            //neighbor in the x direction : xn
+            //neighbor in the y direction : yn
+            xn[0]=1; xn[1]=2; xn[2]=3; xn[3]=0;
+            yn[0]=-1; yn[1]=-1; yn[2]=-1; yn[3]=-1;
+
+            xph[0]=1.0;  xph[1]=1.0; xph[2]=1.0;  xph[3]=1.0;
+            yph[0]=1.0;  yph[1]=1.0; yph[2]=1.0; yph[3]=1.0;
+
+            break;
+
+         case 6:
+            /*
+                   0 --- 1 --- 2 --- 3 --- 4 --- 5
+            */
+            // [][0] up, [][1] dn, [][2] right, [][3] left
+            nghb[0][0]=-1; nghb[0][1]=-1; nghb[0][2]=1; nghb[0][3]=5;
+            nghb[1][0]=-1; nghb[1][1]=-1; nghb[1][2]=2; nghb[1][3]=0;
+            nghb[2][0]=-1; nghb[2][1]=-1; nghb[2][2]=3; nghb[2][3]=1;
+            nghb[3][0]=-1; nghb[3][1]=-1; nghb[3][2]=4; nghb[3][3]=2;
+            nghb[4][0]=-1; nghb[4][1]=-1; nghb[4][2]=5;  nghb[4][3]=3;  
+            nghb[5][0]=-1; nghb[5][1]=-1; nghb[5][2]=0;  nghb[5][3]=4;  
+
+            //neighbor in the x direction : xn
+            //neighbor in the y direction : yn
+            xn[0]=1; xn[1]=2; xn[2]=3; xn[3]=4; xn[4]=5; xn[5]=0;
+            yn[0]=-1; yn[1]=-1; yn[2]=-1; yn[3]=-1; yn[4]=-1; yn[5]=-1;
+
+            xph[0]=1.0;  xph[1]=1.0; xph[2]=1.0;  xph[3]=1.0;
+            xph[4]=1.0;  xph[5]=1.0; 
+            yph[0]=1.0;  yph[1]=1.0; yph[2]=1.0; yph[3]=1.0;
+            yph[4]=1.0;  yph[5]=1.0; 
+
+            break;
+
+         case 8:
+            /*
+                   0 --- 1 --- 2 --- 3 --- 4 --- 5 --- 6 --- 7
+            */
+            // [][0] up, [][1] dn, [][2] right, [][3] left
+            nghb[0][0]=-1; nghb[0][1]=-1; nghb[0][2]=1; nghb[0][3]=7;
+            nghb[1][0]=-1; nghb[1][1]=-1; nghb[1][2]=2; nghb[1][3]=0;
+            nghb[2][0]=-1; nghb[2][1]=-1; nghb[2][2]=3; nghb[2][3]=1;
+            nghb[3][0]=-1; nghb[3][1]=-1; nghb[3][2]=4; nghb[3][3]=2;
+            nghb[4][0]=-1; nghb[4][1]=-1; nghb[4][2]=5;  nghb[4][3]=3;  
+            nghb[5][0]=-1; nghb[5][1]=-1; nghb[5][2]=6;  nghb[5][3]=4;  
+            nghb[6][0]=-1;  nghb[6][1]=-1;  nghb[6][2]=7;   nghb[6][3]=5;
+            nghb[7][0]=-1;  nghb[7][1]=-1;  nghb[7][2]=0;   nghb[7][3]=6;
+
+            //neighbor in the x direction : xn
+            //neighbor in the y direction : yn
+            xn[0]=1; xn[1]=2; xn[2]=3; xn[3]=4; xn[4]=5; xn[5]=6; xn[6]=7; xn[7]=0;
+            yn[0]=-1; yn[1]=-1; yn[2]=-1; yn[3]=-1; yn[4]=-1; yn[5]=-1;yn[6]=-1;yn[7]=-1;
+
+            xph[0]=1.0;  xph[1]=1.0; xph[2]=1.0;  xph[3]=1.0;
+            xph[4]=1.0;  xph[5]=1.0; xph[6]=1.0;  xph[7]=1.0;
+            yph[0]=1.0;  yph[1]=1.0; yph[2]=1.0; yph[3]=1.0;
+            yph[4]=1.0;  yph[5]=1.0; yph[6]=1.0;  yph[7]=1.0;
+
+            break;
+
+         case 10:
+            /*
+                   0 --- 1 --- 2 --- 3 --- 4 --- 5 --- 6 --- 7 --- 8 --- 9
+            */
+            // [][0] up, [][1] dn, [][2] right, [][3] left
+            nghb[0][0]=-1; nghb[0][1]=-1; nghb[0][2]=1; nghb[0][3]=9;
+            nghb[1][0]=-1; nghb[1][1]=-1; nghb[1][2]=2; nghb[1][3]=0;
+            nghb[2][0]=-1; nghb[2][1]=-1; nghb[2][2]=3; nghb[2][3]=1;
+            nghb[3][0]=-1; nghb[3][1]=-1; nghb[3][2]=4; nghb[3][3]=2;
+            nghb[4][0]=-1; nghb[4][1]=-1; nghb[4][2]=5;  nghb[4][3]=3;  
+            nghb[5][0]=-1; nghb[5][1]=-1; nghb[5][2]=6;  nghb[5][3]=4;  
+            nghb[6][0]=-1;  nghb[6][1]=-1;  nghb[6][2]=7;   nghb[6][3]=5;
+            nghb[7][0]=-1;  nghb[7][1]=-1;  nghb[7][2]=8;   nghb[7][3]=6;
+            nghb[8][0]=-1;  nghb[8][1]=-1;  nghb[8][2]=9;   nghb[8][3]=7;
+            nghb[9][0]=-1;  nghb[9][1]=-1;  nghb[9][2]=0;  nghb[9][3]=8;
+
+            //neighbor in the x direction : xn
+            //neighbor in the y direction : yn
+            xn[0]=1; xn[1]=2; xn[2]=3; xn[3]=4; xn[4]=5; xn[5]=6; xn[6]=7; xn[7]=8; xn[8]=9;xn[9]=0;
+            yn[0]=-1; yn[1]=-1; yn[2]=-1; yn[3]=-1; yn[4]=-1; yn[5]=-1;yn[6]=-1;yn[7]=-1;yn[8]=-1;yn[9]=-1;
+
+            xph[0]=1.0;  xph[1]=1.0; xph[2]=1.0;  xph[3]=1.0;
+            xph[4]=1.0;  xph[5]=1.0; xph[6]=1.0;  xph[7]=1.0;
+	    xph[8]=1.0;  xph[9]=1.0;
+            yph[0]=1.0;  yph[1]=1.0; yph[2]=1.0; yph[3]=1.0;
+            yph[4]=1.0;  yph[5]=1.0; yph[6]=1.0;  yph[7]=1.0;
+	    yph[8]=1.0;  yph[9]=1.0;
+
+            break;
+         default:
+            break;
+
+      }
+     }
    }
 
    vector<int> neighbor(int n){

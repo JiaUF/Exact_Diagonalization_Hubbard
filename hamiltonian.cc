@@ -16,7 +16,7 @@
 using namespace std;
 
 
-Cluster cl(N); //N is defined elsewhere
+Cluster cl(N, dim); //N and dim are defined elsewhere
 typedef pair<bitset<2*N>, double> statType;
 
 //function prototype
@@ -51,44 +51,6 @@ void genState(Para para, vector<bitset<2*N> > &states){
             }
          }
       }
-   }
-   return;
-}
-
-void genNq(int Hsize, vector<bitset<2*N> > states, Para pa, 
-           vector<HEle> *phami){
-
-   for(int i=0; i<Hsize; i++){
-      bitset<2*N> stat = states[i];
-      statType sp(stat,1); 
-      double tsum_pi= 0.0, tsum_0 = 0.0;
-      double rho0 = rho('u', 0, sp) + rho('d', 0, sp);
-      for(int nj=0; nj<N; nj++){
-         double rhoj = rho('u', nj, sp) + rho('d', nj, sp);
-         tsum_pi += cos(3.1415926 * cl.xcoord(nj) + 3.1415926 * cl.ycoord(nj)) * rhoj * rho0;
-         tsum_0  += rhoj * rho0;
-      }
-      HEle he(i, i, tsum_pi);
-      phami->push_back(he);
-   }
-   return;
-}
-
-void genSq(int Hsize, vector<bitset<2*N> > states, Para pa, 
-           vector<HEle> *phami){
-
-   for(int i=0; i<Hsize; i++){
-      bitset<2*N> stat = states[i];
-      statType sp(stat,1); 
-      double tsum_pi= 0.0, tsum_0 = 0.0;
-      double rho0 = rho('u', 0, sp) - rho('d', 0, sp);
-      for(int nj=0; nj<N; nj++){
-         double rhoj = rho('u', nj, sp) - rho('d', nj, sp);
-         tsum_pi += cos(3.1415926 * cl.xcoord(nj) + 3.1415926 * cl.ycoord(nj)) * rhoj * rho0;
-         tsum_0  += rhoj * rho0;
-      }
-      HEle he(i, i, tsum_pi);
-      phami->push_back(he);
    }
    return;
 }
@@ -397,7 +359,7 @@ void genHami(int Hsize, vector<bitset<2*N> > states,
                iset.push_back(make_pair(spp.first, -1*(spp.second)*pa.t*phx));
             }
          }           
-
+        if(dim==2){
          int ny = cl.yneighbor(ni);
          double phy = cl.yphase(ni);
          for(int inds=0; inds<2; inds++){
@@ -410,9 +372,10 @@ void genHami(int Hsize, vector<bitset<2*N> > states,
                iset.push_back(make_pair(spp.first, -1*(spp.second)*pa.t*pa.alpha*phy));
             }
          }           
-
+        }
       }
 
+      /*  
       //nearest neighbor hopping t'
       for(int ni=0; ni<N; ni++){
          vector<int> mynei(cl.nnneighbor(ni)); 
@@ -502,6 +465,7 @@ void genHami(int Hsize, vector<bitset<2*N> > states,
          iset.push_back(make_pair(itrin->first,1*(itrin->second)*pa.Us));
          itrin++;
       }
+      */
 
       vector<statType> inset;
       inset=compress(iset);

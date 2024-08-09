@@ -2,6 +2,7 @@
 #define _H_para
 
 const int N=10;
+const int dim=1;
 
 class Para {
 public:

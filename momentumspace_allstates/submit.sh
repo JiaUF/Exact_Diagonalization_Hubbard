@@ -1,0 +1,19 @@
+#!/bin/bash
+
+#SBATCH --qos=cjia1
+#SBATCH --job-name=1DHubbard
+#SBATCH --output=status.%J.out
+#SBATCH --error=status.%J.err
+
+#SBATCH --time=0:59:59
+##SBATCH --partition=bigmem
+#SBATCH --nodes=1
+#SBATCH --ntasks-per-node=1
+#SBATCH --cpus-per-task=1
+#SBATCH --mail-type=ALL
+#SBATCH --mail-user=jiacjustc@gmail.com
+
+module load intel/2020 lapack
+ifort ExactDiagonalization2.f90 -mkl -o main
+srun -n 1 main
+

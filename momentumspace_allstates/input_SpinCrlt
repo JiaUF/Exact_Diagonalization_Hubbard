@@ -1,0 +1,11 @@
+      10       1		read(*, '(2I8)') N3d, dimen
+       5       5 	        read(*, '(2I8)') nup, ndn
+
+for 12site
+nQpoints=5
+Kmap(1) = 0
+Kmap(2) = 1
+Kmap(3) = 2
+Kmap(4) = 3
+Kmap(5) = 7
+
